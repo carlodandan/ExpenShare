@@ -118,14 +118,20 @@ function runMigrations(db) {
   for (const migration of MIGRATIONS) {
     if (appliedVersions.has(migration.version)) continue;
 
-    const applyMigration = db.transaction(() => {
+    // node:sqlite's DatabaseSync has no db.transaction() helper (unlike
+    // better-sqlite3), so we wrap each migration in an explicit transaction
+    // by hand to keep the same "all or nothing" guarantee.
+    db.exec('BEGIN');
+    try {
       migration.up(db);
       db.prepare(
         'INSERT INTO schema_migrations (version, name) VALUES (?, ?)'
       ).run(migration.version, migration.name);
-    });
-
-    applyMigration();
+      db.exec('COMMIT');
+    } catch (err) {
+      db.exec('ROLLBACK');
+      throw err;
+    }
   }
 }
 
