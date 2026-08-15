@@ -51,7 +51,7 @@ export default function Settings() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl px-8 py-6">
+    <div className="mx-auto max-w-5xl px-2 py-6">
       <h1 className="text-lg font-semibold">Settings</h1>
 
       <section className="mt-6 rounded-lg border border-line bg-surface px-5 py-4">

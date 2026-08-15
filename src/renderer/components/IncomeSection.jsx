@@ -43,13 +43,16 @@ export default function IncomeSection({ income, onAdd, onEdit, onDelete }) {
   return (
     <div>
       <div className="grid grid-cols-2 gap-6">
-        {sortedPeople.map((person) => {
+        {sortedPeople.map((person, index) => {
           const group = groups[person.id];
           const items = group ? group.items : [];
           const total = group ? group.total : 0;
 
           return (
-            <div key={person.id}>
+            <div
+              key={person.id}
+              className={index === 0 ? 'border-r border-line pr-6' : ''}
+            >
               <div className="flex items-baseline justify-between border-b border-line pb-1">
                 <p className="text-sm font-semibold">{person.name}</p>
                 <p className="tabular text-sm font-semibold">

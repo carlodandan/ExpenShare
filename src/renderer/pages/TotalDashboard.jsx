@@ -22,7 +22,7 @@ export default function TotalDashboard() {
   );
 
   return (
-    <div className="mx-auto max-w-3xl px-8 py-6">
+    <div className="mx-auto max-w-5xl px-2 py-6">
       <h1 className="text-lg font-semibold">Total Dashboard</h1>
 
       <div className="mt-5 grid grid-cols-3 gap-4">
