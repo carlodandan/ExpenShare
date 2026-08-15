@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+/*
+  NOTE: this app must run fully offline, so we do not fetch webfonts over
+  the network. If you want IBM Plex specifically, vendor the .woff2 files
+  under src/renderer/assets/fonts and add @font-face rules here instead
+  of an external @import - the --font-sans/--font-mono tokens below already
+  reference the family names, so no other change would be needed.
+*/
+/*
+  Design direction: a household ledger, not a fintech dashboard.
+  - Cool paper background (not the cliché warm cream) with deep ink text.
+  - Amounts always render in a tabular monospace, right-aligned, the way
+    numbers sit in an actual ledger column, with a ruled line under totals.
+  - Three semantic accents: income (moss), expense (rust), extra budget
+    (denim) - used as text/icon color and thin rules, never as fills or
+    gradients, so the app reads as a calm utility rather than a product demo.
+*/
+@theme {
+  --color-paper: #f1f3f0;
+  --color-surface: #ffffff;
+  --color-ink: #1e2a24;
+  --color-ink-muted: #5b6660;
+  --color-line: #dde1dc;
+  --color-moss: #2f6f4f;
+  --color-moss-soft: #e6efe9;
+  --color-rust: #a6452b;
+  --color-rust-soft: #f5e8e3;
+  --color-denim: #3b5ba5;
+  --color-denim-soft: #e7ecf6;
+
+  --font-sans: 'IBM Plex Sans', 'Segoe UI', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', 'Cascadia Mono', Consolas, monospace;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.tabular {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.ledger-rule {
+  border-top: 1px solid var(--color-line);
+}
+
+.ledger-total-rule {
+  border-top: 2px solid var(--color-ink);
+}
+
+::selection {
+  background: var(--color-moss-soft);
+}
+
+*:focus-visible {
+  outline: 2px solid var(--color-denim);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
