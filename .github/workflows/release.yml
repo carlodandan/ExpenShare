@@ -14,13 +14,10 @@ jobs:
     steps:
       # 1. Check out the repository code
       - name: Checkout Code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       # 2. Setup Node.js environment
-      - uses: pnpm/setup@v1
-        with:
-          version: 11
-          runtime: node@22
+      - uses: pnpm/setup@v2
 
       # 3. Build the application (Electron Forge make)
       # This runs the 'make' script from your package.json
