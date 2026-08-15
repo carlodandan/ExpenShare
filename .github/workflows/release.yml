@@ -17,11 +17,12 @@ jobs:
         uses: actions/checkout@v4
 
       # 2. Setup Node.js environment
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/setup@v1
         with:
-          version: 10
+          version: 11
+          runtime: node@22
 
       # 3. Build the application (Electron Forge make)
       # This runs the 'make' script from your package.json
       - name: Build
-        run: pnpm install && pnpm run publish
+        run: pnpm run publish
