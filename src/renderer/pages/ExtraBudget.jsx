@@ -13,8 +13,8 @@ export default function ExtraBudget() {
 
   async function load() {
     const [h, w] = await Promise.all([
-      window.api.extraBudget.getHistory(),
-      window.api.extraBudget.listWithdrawals(),
+      window.electronAPI.extraBudget.getHistory(),
+      window.electronAPI.extraBudget.listWithdrawals(),
     ]);
     setHistory(h);
     setWithdrawals(w);
@@ -25,14 +25,15 @@ export default function ExtraBudget() {
   }, [dataVersion]);
 
   async function handleWithdraw(payload) {
-    await window.api.extraBudget.withdraw(payload);
+    await window.electronAPI.extraBudget.withdraw(payload);
     setShowModal(false);
     notifyDataChanged();
     showToast('Extra Budget withdrawal recorded.');
   }
 
   async function handleDeleteWithdrawal() {
-    await window.api.extraBudget.deleteWithdrawal(confirmTarget.id);
+    if (!confirmTarget) return;
+    await window.electron.extraBudget.deleteWithdrawal(confirmTarget.id);
     setConfirmTarget(null);
     notifyDataChanged();
     showToast('Withdrawal removed.');

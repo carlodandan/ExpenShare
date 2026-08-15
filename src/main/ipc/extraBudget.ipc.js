@@ -1,8 +1,8 @@
-const { ipcMain } = require('electron');
-const { getDatabase } = require('../database/database');
-const extraBudget = require('../database/extraBudget');
+import { ipcMain } from 'electron';
+import { getDatabase } from '../database/database.js';
+import * as extraBudget from '../database/extraBudget.js';
 
-function register() {
+export function register() {
   ipcMain.handle('extraBudget:getHistory', () => {
     const db = getDatabase();
     return extraBudget.computeHistory(db);
@@ -23,5 +23,3 @@ function register() {
     return extraBudget.removeWithdrawal(db, id);
   });
 }
-
-module.exports = { register };

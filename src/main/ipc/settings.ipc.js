@@ -1,9 +1,9 @@
-const { ipcMain } = require('electron');
-const { getDatabase } = require('../database/database');
-const settings = require('../database/settings');
-const people = require('../database/people');
+import { ipcMain } from 'electron';
+import { getDatabase } from '../database/database.js';
+import * as settings from '../database/settings.js';
+import * as people from '../database/people.js';
 
-function register() {
+export function register() {
   ipcMain.handle('settings:getAll', () => {
     const db = getDatabase();
     return settings.getAll(db);
@@ -20,5 +20,3 @@ function register() {
     return settings.getAll(db);
   });
 }
-
-module.exports = { register };

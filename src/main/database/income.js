@@ -1,4 +1,4 @@
-const { monthOf } = require('./money');
+import { monthOf } from './money.js';
 
 function validate({ personId, amountMinor, date }) {
   if (!personId) throw new Error('Person is required.');
@@ -10,7 +10,7 @@ function validate({ personId, amountMinor, date }) {
   }
 }
 
-function listForMonth(db, month) {
+export function listForMonth(db, month) {
   return db
     .prepare(
       `SELECT income.id, income.person_id AS personId, people.name AS personName,
@@ -24,7 +24,7 @@ function listForMonth(db, month) {
     .all(month);
 }
 
-function totalForMonth(db, month) {
+export function totalForMonth(db, month) {
   const row = db
     .prepare(
       `SELECT COALESCE(SUM(amount_minor), 0) AS total FROM income
@@ -34,7 +34,7 @@ function totalForMonth(db, month) {
   return row.total;
 }
 
-function create(db, { personId, amountMinor, description, date }) {
+export function create(db, { personId, amountMinor, description, date }) {
   validate({ personId, amountMinor, date });
   const result = db
     .prepare(
@@ -45,7 +45,7 @@ function create(db, { personId, amountMinor, description, date }) {
   return db.prepare('SELECT * FROM income WHERE id = ?').get(result.lastInsertRowid);
 }
 
-function update(db, id, { personId, amountMinor, description, date }) {
+export function update(db, id, { personId, amountMinor, description, date }) {
   validate({ personId, amountMinor, date });
   db.prepare(
     `UPDATE income SET person_id = ?, amount_minor = ?, description = ?, date = ?,
@@ -54,15 +54,16 @@ function update(db, id, { personId, amountMinor, description, date }) {
   return db.prepare('SELECT * FROM income WHERE id = ?').get(id);
 }
 
-function remove(db, id) {
+export function remove(db, id) {
   db.prepare('DELETE FROM income WHERE id = ?').run(id);
   return { id };
 }
 
 /** All-time total, used by the Total Dashboard. */
-function totalAllTime(db) {
+export function totalAllTime(db) {
   const row = db.prepare('SELECT COALESCE(SUM(amount_minor), 0) AS total FROM income').get();
   return row.total;
 }
 
-module.exports = { listForMonth, totalForMonth, create, update, remove, totalAllTime, monthOf };
+// Re-export monthOf for convenience if needed, but it's already imported from money.js
+export { monthOf };

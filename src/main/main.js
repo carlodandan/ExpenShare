@@ -1,20 +1,23 @@
-const path = require('node:path');
-const { app, BrowserWindow } = require('electron');
-const { getDatabase, closeDatabase } = require('./database/database');
+import { app, BrowserWindow } from 'electron';
+import { getDatabase, closeDatabase } from './database/database.js';
+import { fileURLToPath } from 'url';
+import path from 'path';
 
-const incomeIpc = require('./ipc/income.ipc');
-const expensesIpc = require('./ipc/expenses.ipc');
-const dashboardIpc = require('./ipc/dashboard.ipc');
-const extraBudgetIpc = require('./ipc/extraBudget.ipc');
-const settingsIpc = require('./ipc/settings.ipc');
-const reportsIpc = require('./ipc/reports.ipc');
-const backupIpc = require('./ipc/backup.ipc');
+import * as incomeIpc from './ipc/income.ipc.js';
+import * as expensesIpc from './ipc/expenses.ipc.js';
+import * as dashboardIpc from './ipc/dashboard.ipc.js';
+import * as extraBudgetIpc from './ipc/extraBudget.ipc.js';
+import * as settingsIpc from './ipc/settings.ipc.js';
+import * as reportsIpc from './ipc/reports.ipc.js';
+import * as backupIpc from './ipc/backup.ipc.js';
 
 // Vite-injected globals for the renderer bundle (provided by
 // @electron-forge/plugin-vite at build time).
 /* global MAIN_WINDOW_VITE_DEV_SERVER_URL, MAIN_WINDOW_VITE_NAME */
 
-if (require('electron-squirrel-startup')) {
+// electron-squirrel-startup is a CommonJS module; we can import it as default
+import squirrelStartup from 'electron-squirrel-startup';
+if (squirrelStartup) {
   app.quit();
 }
 
@@ -28,7 +31,7 @@ function createWindow() {
     minHeight: 600,
     backgroundColor: '#f7f7f5',
     webPreferences: {
-      preload: path.join(__dirname, '../preload/preload.js'),
+      preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: true,

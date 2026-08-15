@@ -1,13 +1,13 @@
-const { ipcMain, dialog, app, BrowserWindow } = require('electron');
-const path = require('node:path');
-const fs = require('node:fs');
-const { closeDatabase, getDatabase } = require('../database/database');
+import { ipcMain, dialog, app, BrowserWindow } from 'electron';
+import path from 'node:path';
+import fs from 'node:fs';
+import { closeDatabase, getDatabase } from '../database/database.js';
 
 function dbPath() {
   return path.join(app.getPath('userData'), 'budget-tracker.db');
 }
 
-function register() {
+export function register() {
   ipcMain.handle('backup:export', async (event) => {
     // Ensure the DB has been created/opened at least once.
     getDatabase();
@@ -38,5 +38,3 @@ function register() {
     return { canceled: false, restarted: true };
   });
 }
-
-module.exports = { register };

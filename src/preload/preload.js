@@ -1,11 +1,6 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
-/**
- * The renderer never touches Node.js, IPC channel names, or the filesystem
- * directly. Everything it can do is enumerated here, explicitly, as plain
- * async functions.
- */
-contextBridge.exposeInMainWorld('api', {
+contextBridge.exposeInMainWorld('electronAPI', {
   income: {
     listForMonth: (month) => ipcRenderer.invoke('income:listForMonth', month),
     create: (payload) => ipcRenderer.invoke('income:create', payload),

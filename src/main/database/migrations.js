@@ -102,7 +102,7 @@ const MIGRATIONS = [
   },
 ];
 
-function runMigrations(db) {
+export function runMigrations(db) {
   db.exec(`
     CREATE TABLE IF NOT EXISTS schema_migrations (
       version INTEGER PRIMARY KEY,
@@ -135,4 +135,4 @@ function runMigrations(db) {
   }
 }
 
-module.exports = { runMigrations, MIGRATIONS };
+export { MIGRATIONS };

@@ -22,7 +22,7 @@ export default function MonthlyDashboard() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const monthly = await window.api.dashboard.getMonthly(month);
+      const monthly = await window.electronAPI.dashboard.getMonthly(month);
       setData(monthly);
     } finally {
       setLoading(false);
@@ -76,19 +76,19 @@ export default function MonthlyDashboard() {
     if (modal.kind === 'income') {
       const payload = { personId: optionId, amountMinor, description, date };
       if (modal.mode === 'edit') {
-        await window.api.income.update(modal.initial.id, payload);
+        await window.electronAPI.income.update(modal.initial.id, payload);
         showToast('Income updated.');
       } else {
-        await window.api.income.create(payload);
+        await window.electronAPI.income.create(payload);
         showToast('Income added.');
       }
     } else {
       const payload = { categoryId: optionId, amountMinor, description, date };
       if (modal.mode === 'edit') {
-        await window.api.expenses.update(modal.initial.id, payload);
+        await window.electronAPI.expenses.update(modal.initial.id, payload);
         showToast('Expense updated.');
       } else {
-        await window.api.expenses.create(payload);
+        await window.electronAPI.expenses.create(payload);
         showToast('Expense added.');
       }
     }
@@ -97,7 +97,7 @@ export default function MonthlyDashboard() {
   }
 
   async function handleSetFixed(category, amountMinor) {
-    await window.api.expenses.setFixedForMonth({ categoryId: category.id, amountMinor, month });
+    await window.electronAPI.expenses.setFixedForMonth({ categoryId: category.id, amountMinor, month });
     notifyDataChanged();
     showToast(`${category.name} updated.`);
   }
@@ -105,9 +105,9 @@ export default function MonthlyDashboard() {
   async function handleConfirmDelete() {
     const { type, tx } = confirmTarget;
     if (type === 'income') {
-      await window.api.income.delete(tx.id);
+      await window.electronAPI.income.delete(tx.id);
     } else {
-      await window.api.expenses.delete(tx.id);
+      await window.electronAPI.expenses.delete(tx.id);
     }
     setConfirmTarget(null);
     notifyDataChanged();

@@ -21,7 +21,7 @@ export default function Settings() {
   async function saveName(id) {
     const name = (names[id] || '').trim();
     if (!name) return;
-    await window.api.settings.renamePerson(id, name);
+    await window.electronAPI.settings.renamePerson(id, name);
     await refreshSettings();
     notifyDataChanged();
     showToast('Name updated.');
@@ -30,20 +30,20 @@ export default function Settings() {
   async function handleCurrencyChange(code) {
     const currency = CURRENCIES.find((c) => c.code === code);
     if (!currency) return;
-    await window.api.settings.set('currency', currency.code);
-    await window.api.settings.set('currency_symbol', currency.symbol);
+    await window.electronAPI.settings.set('currency', currency.code);
+    await window.electronAPI.settings.set('currency_symbol', currency.symbol);
     await refreshSettings();
     notifyDataChanged();
     showToast('Currency updated.');
   }
 
   async function handleBackup() {
-    const result = await window.api.backup.export();
+    const result = await window.electronAPI.backup.export();
     if (!result.canceled) showToast('Backup saved.');
   }
 
   async function handleRestore() {
-    const result = await window.api.backup.restore();
+    const result = await window.electronAPI.backup.restore();
     if (!result.canceled) {
       showToast('Data restored. Reloading…');
       setTimeout(() => window.location.reload(), 800);

@@ -1,7 +1,7 @@
-const fs = require('node:fs');
-const PDFDocument = require('pdfkit');
-const dashboard = require('./database/dashboard');
-const { toMajorUnits } = require('./database/money');
+import fs from 'node:fs';
+import PDFDocument from 'pdfkit';
+import * as dashboard from './database/dashboard.js';
+import { toMajorUnits } from './database/money.js';
 
 function money(minor, symbol = '₱') {
   return `${symbol}${toMajorUnits(minor).toLocaleString('en-PH', {
@@ -127,4 +127,4 @@ function buildPdf(db, month, symbol, outputPath) {
   });
 }
 
-module.exports = { buildCsv, buildPdf };
+export { buildCsv, buildPdf };

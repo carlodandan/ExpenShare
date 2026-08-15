@@ -1,8 +1,8 @@
-const { ipcMain } = require('electron');
-const { getDatabase } = require('../database/database');
-const expenses = require('../database/expenses');
+import { ipcMain } from 'electron';
+import { getDatabase } from '../database/database.js';
+import * as expenses from '../database/expenses.js';
 
-function register() {
+export function register() {
   ipcMain.handle('expenses:listCategories', () => {
     const db = getDatabase();
     return expenses.listCategories(db);
@@ -33,5 +33,3 @@ function register() {
     return expenses.remove(db, id);
   });
 }
-
-module.exports = { register };

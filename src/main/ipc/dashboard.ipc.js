@@ -1,8 +1,8 @@
-const { ipcMain } = require('electron');
-const { getDatabase } = require('../database/database');
-const dashboard = require('../database/dashboard');
+import { ipcMain } from 'electron';
+import { getDatabase } from '../database/database.js';
+import * as dashboard from '../database/dashboard.js';
 
-function register() {
+export function register() {
   ipcMain.handle('dashboard:getMonthly', (event, month) => {
     const db = getDatabase();
     return dashboard.getMonthly(db, month);
@@ -13,5 +13,3 @@ function register() {
     return dashboard.getTotal(db);
   });
 }
-
-module.exports = { register };

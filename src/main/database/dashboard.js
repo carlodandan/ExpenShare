@@ -1,8 +1,8 @@
-const income = require('./income');
-const expenses = require('./expenses');
-const extraBudget = require('./extraBudget');
+import * as income from './income.js';
+import * as expenses from './expenses.js';
+import * as extraBudget from './extraBudget.js';
 
-function getMonthly(db, month) {
+export function getMonthly(db, month) {
   const grossMinor = income.totalForMonth(db, month);
   const expensesMinor = expenses.totalForMonth(db, month);
   const netMinor = grossMinor - expensesMinor;
@@ -25,7 +25,7 @@ function getMonthly(db, month) {
   };
 }
 
-function getTotal(db) {
+export function getTotal(db) {
   const grossMinor = income.totalAllTime(db);
   const expensesMinor = expenses.totalAllTime(db);
   const netMinor = grossMinor - expensesMinor;
@@ -90,5 +90,3 @@ function buildAnalysis(months, breakdown) {
     largestExpenseCategory,
   };
 }
-
-module.exports = { getMonthly, getTotal };

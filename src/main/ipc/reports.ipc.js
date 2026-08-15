@@ -1,10 +1,10 @@
-const { ipcMain, dialog, BrowserWindow } = require('electron');
-const fs = require('node:fs');
-const { getDatabase } = require('../database/database');
-const { buildCsv, buildPdf } = require('../reports');
-const settings = require('../database/settings');
+import { ipcMain, dialog, BrowserWindow } from 'electron';
+import fs from 'node:fs';
+import { getDatabase } from '../database/database.js';
+import { buildCsv, buildPdf } from '../reports.js';
+import * as settings from '../database/settings.js';
 
-function register() {
+export function register() {
   ipcMain.handle('reports:export', async (event, { month, format }) => {
     const db = getDatabase();
     const currentSettings = settings.getAll(db);
@@ -32,5 +32,3 @@ function register() {
     return { canceled: false, filePath };
   });
 }
-
-module.exports = { register };

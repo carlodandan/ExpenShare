@@ -2,5 +2,6 @@ allowBuilds:
   electron: true
   electron-winstaller: true
   esbuild: true
+  lzma-native: set this to true or false
 
 nodeLinker: hoisted

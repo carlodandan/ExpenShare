@@ -1,4 +1,4 @@
-const { monthOf } = require('./money');
+import { monthOf } from './money.js';
 
 /**
  * The Extra Budget balance is never stored directly - it is always
@@ -15,7 +15,7 @@ const { monthOf } = require('./money');
  * push it below zero, the balance floors at 0 and the shortfall for that
  * month is reported separately rather than hidden.
  */
-function computeHistory(db) {
+export function computeHistory(db) {
   const months = db
     .prepare(
       `SELECT DISTINCT month FROM (
@@ -73,11 +73,11 @@ function computeHistory(db) {
   return { balanceMinor: balance, monthly };
 }
 
-function getBalance(db) {
+export function getBalance(db) {
   return computeHistory(db).balanceMinor;
 }
 
-function listWithdrawals(db) {
+export function listWithdrawals(db) {
   return db
     .prepare(
       `SELECT id, amount_minor AS amountMinor, description, month, date, created_at AS createdAt
@@ -86,7 +86,7 @@ function listWithdrawals(db) {
     .all();
 }
 
-function withdraw(db, { amountMinor, description, month, date }) {
+export function withdraw(db, { amountMinor, description, month, date }) {
   if (!Number.isFinite(amountMinor) || amountMinor <= 0) {
     throw new Error('Amount must be greater than zero.');
   }
@@ -110,9 +110,10 @@ function withdraw(db, { amountMinor, description, month, date }) {
     .get(result.lastInsertRowid);
 }
 
-function removeWithdrawal(db, id) {
+export function removeWithdrawal(db, id) {
   db.prepare("DELETE FROM extra_budget_transactions WHERE id = ? AND type = 'withdrawal'").run(id);
   return { id };
 }
 
-module.exports = { computeHistory, getBalance, listWithdrawals, withdraw, removeWithdrawal, monthOf };
+// Re-export monthOf for convenience
+export { monthOf };

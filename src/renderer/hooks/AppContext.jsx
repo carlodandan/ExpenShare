@@ -8,7 +8,7 @@ export function AppProvider({ children }) {
   const [toast, setToast] = useState(null);
 
   const refreshSettings = useCallback(async () => {
-    const s = await window.api.settings.getAll();
+    const s = await window.electronAPI.settings.getAll();
     setSettings(s);
     return s;
   }, []);

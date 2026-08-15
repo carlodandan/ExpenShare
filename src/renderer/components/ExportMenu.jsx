@@ -17,7 +17,7 @@ export default function ExportMenu({ month }) {
   async function handleExport(format) {
     setOpen(false);
     try {
-      const result = await window.api.reports.export(month, format);
+      const result = await window.electronAPI.reports.export(month, format);
       if (!result.canceled) showToast(`Report saved as ${format.toUpperCase()}.`);
     } catch (err) {
       showToast(err?.message || 'Export failed.', 'error');

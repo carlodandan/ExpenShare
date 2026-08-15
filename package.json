@@ -36,7 +36,6 @@
     "@electron-forge/publisher-github": "^7.11.1",
     "@electron/fuses": "^1.8.0",
     "electron": "^43.4.0",
-    "electron-rebuild": "^3.2.9",
     "vite": "^5.4.21"
   }
 }

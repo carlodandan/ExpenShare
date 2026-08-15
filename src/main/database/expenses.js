@@ -8,7 +8,7 @@ function validate({ categoryId, amountMinor, date }) {
   }
 }
 
-function listCategories(db) {
+export function listCategories(db) {
   return db
     .prepare(
       `SELECT id, name, type, is_active AS isActive, sort_order AS sortOrder
@@ -21,7 +21,7 @@ function listCategories(db) {
  * Returns every active category for the given month, each with its total
  * and (for repeatable categories) the individual transactions.
  */
-function listForMonth(db, month) {
+export function listForMonth(db, month) {
   const categories = listCategories(db);
   const totalsStmt = db.prepare(
     `SELECT COALESCE(SUM(amount_minor), 0) AS total FROM expenses
@@ -42,7 +42,7 @@ function listForMonth(db, month) {
   });
 }
 
-function totalForMonth(db, month) {
+export function totalForMonth(db, month) {
   const row = db
     .prepare(
       `SELECT COALESCE(SUM(amount_minor), 0) AS total FROM expenses
@@ -52,7 +52,7 @@ function totalForMonth(db, month) {
   return row.total;
 }
 
-function create(db, { categoryId, amountMinor, description, date }) {
+export function create(db, { categoryId, amountMinor, description, date }) {
   validate({ categoryId, amountMinor, date });
   const result = db
     .prepare(
@@ -68,7 +68,7 @@ function create(db, { categoryId, amountMinor, description, date }) {
  * month's row for the category rather than appending a new transaction,
  * so "fixed" categories never accumulate duplicate rows within a month.
  */
-function setFixedForMonth(db, { categoryId, amountMinor, month }) {
+export function setFixedForMonth(db, { categoryId, amountMinor, month }) {
   if (!Number.isFinite(amountMinor) || amountMinor < 0) {
     throw new Error('Amount must be zero or greater.');
   }
@@ -99,7 +99,7 @@ function setFixedForMonth(db, { categoryId, amountMinor, month }) {
   return db.prepare('SELECT * FROM expenses WHERE id = ?').get(result.lastInsertRowid);
 }
 
-function update(db, id, { categoryId, amountMinor, description, date }) {
+export function update(db, id, { categoryId, amountMinor, description, date }) {
   validate({ categoryId, amountMinor, date });
   db.prepare(
     `UPDATE expenses SET category_id = ?, amount_minor = ?, description = ?, date = ?,
@@ -108,18 +108,18 @@ function update(db, id, { categoryId, amountMinor, description, date }) {
   return db.prepare('SELECT * FROM expenses WHERE id = ?').get(id);
 }
 
-function remove(db, id) {
+export function remove(db, id) {
   db.prepare('DELETE FROM expenses WHERE id = ?').run(id);
   return { id };
 }
 
-function totalAllTime(db) {
+export function totalAllTime(db) {
   const row = db.prepare('SELECT COALESCE(SUM(amount_minor), 0) AS total FROM expenses').get();
   return row.total;
 }
 
 /** Category breakdown across all recorded history, for the donut chart. */
-function breakdownAllTime(db) {
+export function breakdownAllTime(db) {
   return db
     .prepare(
       `SELECT expense_categories.name AS name,
@@ -132,15 +132,3 @@ function breakdownAllTime(db) {
     )
     .all();
 }
-
-module.exports = {
-  listCategories,
-  listForMonth,
-  totalForMonth,
-  create,
-  setFixedForMonth,
-  update,
-  remove,
-  totalAllTime,
-  breakdownAllTime,
-};

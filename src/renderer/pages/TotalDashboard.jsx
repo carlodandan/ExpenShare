@@ -10,7 +10,7 @@ export default function TotalDashboard() {
   const [sortDesc, setSortDesc] = useState(true);
 
   useEffect(() => {
-    window.api.dashboard.getTotal().then(setData);
+    window.electronAPI.dashboard.getTotal().then(setData);
   }, [dataVersion]);
 
   if (!data) {
