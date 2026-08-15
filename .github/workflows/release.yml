@@ -24,4 +24,4 @@ jobs:
       # 3. Build the application (Electron Forge make)
       # This runs the 'make' script from your package.json
       - name: Build
-        run: pnpm run publish
+        run: pnpm install && pnpm run publish
