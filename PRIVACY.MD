@@ -1,10 +1,10 @@
-# Privacy Policy for Budget Tracker
+# Privacy Policy for ExpenShare
 
 *Last updated: August 2026*
 
-This privacy policy describes how **Budget Tracker** handles your personal data.
+This privacy policy describes how **ExpenShare** handles your personal data.
 
-**Budget Tracker is an offline desktop application.** It does not require an internet connection to function, and it never sends any data over the network. All information you enter—income, expenses, people, categories, settings, and any other records—remains **solely on your local device**.
+**ExpenShare is an offline desktop application.** It does not require an internet connection to function, and it never sends any data over the network. All information you enter—income, expenses, people, categories, settings, and any other records—remains **solely on your local device**.
 
 ## Data collection and storage
 
@@ -12,7 +12,7 @@ This privacy policy describes how **Budget Tracker** handles your personal data.
   The application does not phone home, send analytics, or communicate with any external servers or services.
 
 - **All data lives in a local SQLite database file.**  
-  This file is stored in Electron’s standard `userData` directory on your computer (e.g., `~/Library/Application Support/Budget Tracker/` on macOS, `%APPDATA%\Budget Tracker\` on Windows, or `~/.config/Budget Tracker/` on Linux). You can locate and manage this file at any time.
+  This file is stored in Electron’s standard `userData` directory on your computer (e.g., `~/Library/Application Support/ExpenShare/` on macOS, `%APPDATA%\ExpenShare\` on Windows, or `~/.config/ExpenShare/` on Linux). You can locate and manage this file at any time.
 
 - **No cloud sync, no third-party APIs.**  
   There are no integrations with cloud storage, authentication providers, or analytics platforms. The app does not embed any trackers, cookies, or telemetry.
@@ -39,7 +39,7 @@ This policy may be updated occasionally to reflect changes in the application. T
 
 ## Contact
 
-Budget Tracker is an open‑source project. If you have questions about this privacy policy or the application’s data handling, please open an issue in the project repository.
+ExpenShare is an open‑source project. If you have questions about this privacy policy or the application’s data handling, please open an issue in the project repository.
 
 ---
 

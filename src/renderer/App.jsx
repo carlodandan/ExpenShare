@@ -6,6 +6,7 @@ import MonthlyDashboard from './pages/MonthlyDashboard.jsx';
 import TotalDashboard from './pages/TotalDashboard.jsx';
 import ExtraBudget from './pages/ExtraBudget.jsx';
 import Settings from './pages/Settings.jsx';
+import LoadingScreen from './components/LoadingScreen.jsx';
 
 const PAGES = {
   monthly: MonthlyDashboard,
@@ -33,7 +34,17 @@ function Shell() {
 export default function App() {
   return (
     <AppProvider>
-      <Shell />
+      <AppContent />
     </AppProvider>
   );
+}
+
+function AppContent() {
+  const { loading, progress } = useAppContext();
+
+  if (loading) {
+    return <LoadingScreen progress={progress} />;
+  }
+
+  return <Shell />;
 }

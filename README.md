@@ -1,4 +1,4 @@
-# Budget Tracker
+# ExpenShare
 
 An offline desktop budget tracker for two people sharing a household budget.  
 Built with Vite + React + Electron (Electron Forge) + Tailwind CSS v4, backed
@@ -90,11 +90,11 @@ concurrency.
 The SQLite database lives in Electron's userData directory (not inside the
 project folder), so it persists across app updates and reinstalls:
 
-- macOS: `~/Library/Application Support/Budget Tracker/budget-tracker.db`
+- macOS: `~/Library/Application Support/ExpenShare/budget-tracker.db`
 
-- Windows: `%APPDATA%\Budget Tracker\budget-tracker.db`
+- Windows: `%APPDATA%\ExpenShare\budget-tracker.db`
 
-- Linux: `~/.config/Budget Tracker/budget-tracker.db`
+- Linux: `~/.config/ExpenShare/budget-tracker.db`
 
 Use **Settings → Backup Database / Restore Database** to copy this file
 elsewhere or restore from a previous copy.

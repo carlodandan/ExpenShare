@@ -1,4 +1,4 @@
-name: Build Budget Tracker
+name: Build ExpenShare
 
 on:
   workflow_dispatch:

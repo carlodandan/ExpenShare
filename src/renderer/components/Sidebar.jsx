@@ -12,7 +12,7 @@ export default function Sidebar({ current, onNavigate }) {
       <div>
         <div className="px-5 pb-4 pt-6">
           <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-muted">
-            Budget Tracker
+            ExpenShare
           </p>
         </div>
         <nav className="flex flex-col gap-0.5 px-3">

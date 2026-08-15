@@ -1,5 +1,6 @@
 import { app, BrowserWindow } from 'electron';
 import { getDatabase, closeDatabase } from './database/database.js';
+import { updateElectronApp, UpdateSourceType } from "update-electron-app";
 import path from 'path';
 
 import * as incomeIpc from './ipc/income.ipc.js';
@@ -11,9 +12,20 @@ import * as reportsIpc from './ipc/reports.ipc.js';
 import * as backupIpc from './ipc/backup.ipc.js';
 
 import squirrelStartup from 'electron-squirrel-startup';
+
 if (squirrelStartup) {
   app.quit();
 }
+
+updateElectronApp({
+    updateSource: {
+        type: UpdateSourceType.ElectronPublicUpdateService,
+        repo: 'carlodandan/ExpenShare'
+    },
+    updateInterval: '5 minutes'
+});
+
+app.setAppUserModelId("com.budget.tracker.desktop");
 
 let mainWindow = null;
 
@@ -30,6 +42,7 @@ function createWindow() {
       nodeIntegration: false,
       sandbox: true,
     },
+    icon: path.join(__dirname, '../../icons/expenshare.ico'),
   });
 
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {

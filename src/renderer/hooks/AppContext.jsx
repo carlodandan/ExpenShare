@@ -6,6 +6,8 @@ export function AppProvider({ children }) {
   const [settings, setSettings] = useState(null);
   const [dataVersion, setDataVersion] = useState(0);
   const [toast, setToast] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [progress, setProgress] = useState(0);
 
   const refreshSettings = useCallback(async () => {
     const s = await window.electronAPI.settings.getAll();
@@ -13,13 +15,43 @@ export function AppProvider({ children }) {
     return s;
   }, []);
 
+  // Simulate progress bar animation during loading
   useEffect(() => {
-    refreshSettings();
+    if (!loading) return;
+    const interval = setInterval(() => {
+      setProgress((p) => {
+        const increment = Math.random() * 6 + 2;
+        return Math.min(p + increment, 95); // never reach 100 until done
+      });
+    }, 200);
+    return () => clearInterval(interval);
+  }, [loading]);
+
+  useEffect(() => {
+    const start = Date.now();
+    let loaded = false;
+
+    const load = async () => {
+      try {
+        await refreshSettings();
+        loaded = true;
+      } catch (err) {
+        console.error('Failed to load settings:', err);
+        loaded = true; // still proceed
+      } finally {
+        const elapsed = Date.now() - start;
+        const remaining = Math.max(0, 3000 - elapsed);
+        setTimeout(() => {
+          setProgress(100); // complete the bar
+          setLoading(false);
+        }, remaining);
+      }
+    };
+    load();
   }, [refreshSettings]);
 
   // Call after any create/update/delete so every page listening on
-  // dataVersion refetches - keeps Gross/Net/Total/Extra Budget in sync
-  // without a heavier state-management library.
+  // dataVersion refetches
   const notifyDataChanged = useCallback(() => {
     setDataVersion((v) => v + 1);
   }, []);
@@ -48,6 +80,8 @@ export function AppProvider({ children }) {
         people,
         toast,
         showToast,
+        loading,
+        progress,
       }}
     >
       {children}

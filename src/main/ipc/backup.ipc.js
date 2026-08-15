@@ -13,9 +13,9 @@ export function register() {
     getDatabase();
     const win = BrowserWindow.fromWebContents(event.sender);
     const { canceled, filePath } = await dialog.showSaveDialog(win, {
-      title: 'Backup Budget Tracker Data',
+      title: 'Backup ExpenShare Data',
       defaultPath: `budget-tracker-backup-${new Date().toISOString().slice(0, 10)}.db`,
-      filters: [{ name: 'Budget Tracker Backup', extensions: ['db'] }],
+      filters: [{ name: 'ExpenShare Backup', extensions: ['db'] }],
     });
     if (canceled || !filePath) return { canceled: true };
 
@@ -26,9 +26,9 @@ export function register() {
   ipcMain.handle('backup:restore', async (event) => {
     const win = BrowserWindow.fromWebContents(event.sender);
     const { canceled, filePaths } = await dialog.showOpenDialog(win, {
-      title: 'Restore Budget Tracker Data',
+      title: 'Restore ExpenShare Data',
       properties: ['openFile'],
-      filters: [{ name: 'Budget Tracker Backup', extensions: ['db'] }],
+      filters: [{ name: 'ExpenShare Backup', extensions: ['db'] }],
     });
     if (canceled || filePaths.length === 0) return { canceled: true };
 

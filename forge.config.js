@@ -6,21 +6,21 @@ module.exports = {
   packagerConfig: {
     asar: true,
     prune: true,
-    name: 'Budget Tracker',
-    executableName: 'budget-tracker',
+    name: 'ExpenShare',
+    executableName: 'expenshare',
     ignore: (file) => {
       if (!file) return false;
       const keep = file.startsWith('/.vite') || file.startsWith('/node_modules');
       return !keep;
     },
-    icon: undefined,
+    icon: './icons/expenshare',
   },
   rebuildConfig: {},
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
       config: {
-        name: 'BudgetTracker',
+        name: 'ExpenShare',
         authors: 'Carlo Dandan',
         description: 'Offline household budget tracker for two people.',
       },
@@ -32,7 +32,7 @@ module.exports = {
       config: {
         repository: {
           owner: 'carlodandan',
-          name: 'budget-tracker'
+          name: 'expenshare'
         },
         draft: false,
         tagPrefix: 'beta',
