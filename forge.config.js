@@ -23,6 +23,8 @@ module.exports = {
         name: 'ExpenShare',
         authors: 'Carlo Dandan',
         description: 'Offline household budget tracker for two people.',
+        iconUrl: 'https://raw.githubusercontent.com/carlodandan/ExpenShare/refs/heads/main/icons/expenshare.ico',
+        setupIcon: './icons/expenshare.ico'
       },
     },
   ],
