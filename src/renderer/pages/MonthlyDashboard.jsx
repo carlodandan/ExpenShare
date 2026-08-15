@@ -16,8 +16,8 @@ export default function MonthlyDashboard() {
   const [month, setMonth] = useState(currentMonthKey());
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [modal, setModal] = useState(null); // { kind, mode, initial, options, categoryId }
-  const [confirmTarget, setConfirmTarget] = useState(null); // { type: 'income'|'expense', tx }
+  const [modal, setModal] = useState(null);
+  const [confirmTarget, setConfirmTarget] = useState(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -121,7 +121,8 @@ export default function MonthlyDashboard() {
   const netTone = data.netMinor < 0 ? 'negative' : 'positive';
 
   return (
-    <div className="mx-auto max-w-3xl px-8 py-6">
+    <div className="mx-auto max-w-4xl px-2 py-6">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <h1 className="text-lg font-semibold">Monthly Dashboard</h1>
         <div className="flex items-center gap-3">
@@ -130,11 +131,13 @@ export default function MonthlyDashboard() {
         </div>
       </div>
 
+      {/* Summary cards */}
       <div className="mt-5 grid grid-cols-2 gap-4">
         <SummaryCard label="Gross" minor={data.grossMinor} tone="neutral" />
         <SummaryCard label="Net" minor={data.netMinor} tone={netTone} />
       </div>
 
+      {/* Extra Budget alerts */}
       {data.extraBudget.shortfallMinor > 0 && (
         <div className="mt-4 rounded-md border border-rust bg-rust-soft px-4 py-3 text-sm text-rust">
           Extra Budget could not cover this month's shortfall of{' '}
@@ -153,30 +156,40 @@ export default function MonthlyDashboard() {
         </div>
       )}
 
-      <section className="mt-8 rounded-lg border border-line bg-surface px-5 py-4">
-        <div className="mb-2 flex items-center justify-between">
-          <h2 className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-muted">Income</h2>
-          <AddTransactionButton onAddIncome={openAddIncome} onAddExpense={() => openAddExpense()} />
-        </div>
-        <IncomeSection
-          income={data.income}
-          onAdd={openAddIncome}
-          onEdit={openEditIncome}
-          onDelete={(tx) => setConfirmTarget({ type: 'income', tx })}
-        />
-      </section>
+      {/* Two‑column grid: Expenses (col-span-2) | Income (col-span-3) */}
+      <div className="mt-4 grid grid-cols-5 gap-6">
+        <section className="col-span-2 rounded-lg border border-line bg-surface px-5 py-4">
+          <h2 className="mb-2 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-muted">
+            Expenses
+          </h2>
+          <ExpenseSection
+            categories={data.expenseCategories}
+            onSetFixed={handleSetFixed}
+            onEditTransaction={openEditExpense}
+            onDeleteTransaction={(tx) => setConfirmTarget({ type: 'expense', tx })}
+            onAddForCategory={openAddExpense}
+          />
+        </section>
 
-      <section className="mt-6 rounded-lg border border-line bg-surface px-5 py-4">
-        <h2 className="mb-2 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-muted">Expenses</h2>
-        <ExpenseSection
-          categories={data.expenseCategories}
-          onSetFixed={handleSetFixed}
-          onEditTransaction={openEditExpense}
-          onDeleteTransaction={(tx) => setConfirmTarget({ type: 'expense', tx })}
-          onAddForCategory={openAddExpense}
-        />
-      </section>
+        <section className="col-span-3 rounded-lg border border-line bg-surface px-5 py-4">
+          <h2 className="mb-2 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-muted">
+            Income
+          </h2>
+          <IncomeSection
+            income={data.income}
+            onAdd={openAddIncome}
+            onEdit={openEditIncome}
+            onDelete={(tx) => setConfirmTarget({ type: 'income', tx })}
+          />
+        </section>
+      </div>
 
+      {/* Floating Add Button */}
+      <div className="fixed bottom-6 right-6 z-50">
+        <AddTransactionButton onAddIncome={openAddIncome} onAddExpense={() => openAddExpense()} />
+      </div>
+
+      {/* Modals and confirm dialog */}
       {modal && (
         <TransactionModal
           kind={modal.kind}

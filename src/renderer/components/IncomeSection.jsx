@@ -1,61 +1,125 @@
-import React from 'react';
-import { formatMoney, formatDateTime } from '../utils/format.js';
+import React, { useState } from 'react';
+import { formatMoney, formatDate } from '../utils/format.js';
 import { useAppContext } from '../hooks/AppContext.jsx';
 import EmptyState from './EmptyState.jsx';
 
 export default function IncomeSection({ income, onAdd, onEdit, onDelete }) {
-  const { currencySymbol } = useAppContext();
+  const { currencySymbol, people } = useAppContext();
+  const [expanded, setExpanded] = useState({});
 
-  if (income.length === 0) {
-    return <EmptyState message="No income recorded for this month." actionLabel="Add Income" onAction={onAdd} />;
-  }
-
-  const byPerson = {};
+  // Build a map: personId -> array of transactions
+  const groups = {};
   income.forEach((tx) => {
-    byPerson[tx.personId] = byPerson[tx.personId] || { name: tx.personName, items: [], total: 0 };
-    byPerson[tx.personId].items.push(tx);
-    byPerson[tx.personId].total += tx.amountMinor;
+    if (!groups[tx.personId]) {
+      groups[tx.personId] = {
+        name: tx.personName,
+        items: [],
+        total: 0,
+      };
+    }
+    groups[tx.personId].items.push(tx);
+    groups[tx.personId].total += tx.amountMinor;
   });
 
+  // Sort people by sort_order
+  const sortedPeople = people.slice().sort((a, b) => a.sort_order - b.sort_order);
+
+  // Toggle expansion for a transaction
+  const toggleExpand = (id) => {
+    setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  // If no income at all, show a single empty state
+  if (income.length === 0) {
+    return (
+      <EmptyState
+        message="No income recorded for this month."
+        actionLabel="Add Income"
+        onAction={onAdd}
+      />
+    );
+  }
+
   return (
-    <div className="space-y-4">
-      {Object.entries(byPerson).map(([personId, group]) => (
-        <div key={personId}>
-          <div className="flex items-baseline justify-between">
-            <p className="text-sm font-semibold">{group.name}</p>
-            <p className="tabular text-sm font-semibold">{formatMoney(group.total, currencySymbol)}</p>
-          </div>
-          <ul className="mt-1 divide-y divide-line">
-            {group.items.map((tx) => (
-              <li key={tx.id} className="group flex items-center justify-between py-2">
-                <div>
-                  <p className="text-sm">{tx.description || 'Income'}</p>
-                  <p className="text-xs text-ink-muted">{formatDateTime(tx.createdAt)}</p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="tabular text-sm">{formatMoney(tx.amountMinor, currencySymbol)}</span>
-                  <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
-                    <button
-                      type="button"
-                      onClick={() => onEdit(tx)}
-                      className="text-xs text-denim hover:underline"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => onDelete(tx)}
-                      className="text-xs text-rust hover:underline"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+    <div>
+      <div className="grid grid-cols-2 gap-6">
+        {sortedPeople.map((person) => {
+          const group = groups[person.id];
+          const items = group ? group.items : [];
+          const total = group ? group.total : 0;
+
+          return (
+            <div key={person.id}>
+              <div className="flex items-baseline justify-between border-b border-line pb-1">
+                <p className="text-sm font-semibold">{person.name}</p>
+                <p className="tabular text-sm font-semibold">
+                  {formatMoney(total, currencySymbol)}
+                </p>
+              </div>
+              {items.length === 0 ? (
+                <p className="py-3 text-sm text-ink-muted">No income</p>
+              ) : (
+                <ul className="mt-1 divide-y divide-line">
+                  {items.map((tx) => {
+                    const isExpanded = !!expanded[tx.id];
+                    return (
+                      <li
+                        key={tx.id}
+                        className="group py-2 cursor-pointer"
+                        onClick={() => toggleExpand(tx.id)}
+                      >
+                        {/* Top row: Amount + expand indicator + action buttons */}
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs text-ink-muted">
+                              {isExpanded ? '▼' : '▶'}
+                            </span>
+                            <span className="tabular text-sm font-semibold">
+                              {formatMoney(tx.amountMinor, currencySymbol)}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onEdit(tx);
+                                }}
+                                className="text-xs text-denim hover:underline"
+                              >
+                                Edit
+                              </button>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onDelete(tx);
+                                }}
+                                className="text-xs text-rust hover:underline"
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Expanded content: description and date */}
+                        {isExpanded && (
+                          <div className="mt-1 pl-2 text-sm text-ink-muted">
+                            <p>{tx.description || 'No description'}</p>
+                            <p className="text-xs">{formatDate(tx.date)}</p>
+                          </div>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
