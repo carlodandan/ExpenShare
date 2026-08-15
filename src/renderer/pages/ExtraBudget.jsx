@@ -8,16 +8,21 @@ export default function ExtraBudget() {
   const { currencySymbol, dataVersion, notifyDataChanged, showToast } = useAppContext();
   const [history, setHistory] = useState(null);
   const [withdrawals, setWithdrawals] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [confirmTarget, setConfirmTarget] = useState(null);
 
   async function load() {
-    const [h, w] = await Promise.all([
+    const [h, w, cats] = await Promise.all([
       window.electronAPI.extraBudget.getHistory(),
       window.electronAPI.extraBudget.listWithdrawals(),
+      window.electronAPI.expenses.listCategories(),
     ]);
     setHistory(h);
     setWithdrawals(w);
+    // Filter only repeatable categories (Groceries, Miscellaneous, etc.)
+    const repeatable = cats.filter((c) => c.type === 'repeatable');
+    setCategories(repeatable);
   }
 
   useEffect(() => {
@@ -25,15 +30,16 @@ export default function ExtraBudget() {
   }, [dataVersion]);
 
   async function handleWithdraw(payload) {
-    await window.electronAPI.extraBudget.withdraw(payload);
+    // payload contains categoryId, amountMinor, description, month, date
+    await window.electronAPI.extraBudget.withdrawAndExpense(payload);
     setShowModal(false);
     notifyDataChanged();
-    showToast('Extra Budget withdrawal recorded.');
+    showToast('Expense and Extra Budget withdrawal recorded.');
   }
 
   async function handleDeleteWithdrawal() {
     if (!confirmTarget) return;
-    await window.electron.extraBudget.deleteWithdrawal(confirmTarget.id);
+    await window.electronAPI.extraBudget.deleteWithdrawal(confirmTarget.id);
     setConfirmTarget(null);
     notifyDataChanged();
     showToast('Withdrawal removed.');
@@ -128,6 +134,7 @@ export default function ExtraBudget() {
       {showModal && (
         <UseExtraBudgetModal
           availableMinor={history.balanceMinor}
+          categories={categories}
           onCancel={() => setShowModal(false)}
           onSubmit={handleWithdraw}
         />

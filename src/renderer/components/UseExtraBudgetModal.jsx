@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { toMinorUnits, currentMonthKey, formatMoney } from '../utils/format.js';
 import { useAppContext } from '../hooks/AppContext.jsx';
 
-export default function UseExtraBudgetModal({ availableMinor, onCancel, onSubmit }) {
+export default function UseExtraBudgetModal({ availableMinor, categories, onCancel, onSubmit }) {
   const { currencySymbol } = useAppContext();
   const [amount, setAmount] = useState('');
   const [reason, setReason] = useState('');
   const [month, setMonth] = useState(currentMonthKey());
+  const [categoryId, setCategoryId] = useState(categories.length > 0 ? categories[0].id : '');
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
@@ -27,10 +28,22 @@ export default function UseExtraBudgetModal({ availableMinor, onCancel, onSubmit
       setError('Please choose a month to apply this to.');
       return;
     }
+    if (!categoryId) {
+      setError('Please select a category.');
+      return;
+    }
 
     setSubmitting(true);
     try {
-      await onSubmit({ amountMinor, description: reason, month });
+      // We'll send the selected category, amount, reason, month and a date (first of month)
+      const date = `${month}-01`;
+      await onSubmit({
+        categoryId,
+        amountMinor,
+        description: reason,
+        month,
+        date,
+      });
     } catch (err) {
       setError(err?.message || 'Something went wrong. Please try again.');
       setSubmitting(false);
@@ -48,7 +61,23 @@ export default function UseExtraBudgetModal({ availableMinor, onCancel, onSubmit
           Available: <span className="tabular">{formatMoney(availableMinor, currencySymbol)}</span>
         </p>
 
-        <label className="mt-4 block text-xs font-medium text-ink-muted" htmlFor="wd-amount">
+        <label className="mt-4 block text-xs font-medium text-ink-muted" htmlFor="wd-category">
+          Category
+        </label>
+        <select
+          id="wd-category"
+          value={categoryId}
+          onChange={(e) => setCategoryId(e.target.value)}
+          className="mt-1 w-full rounded-md border border-line bg-paper px-3 py-2 text-sm"
+        >
+          {categories.map((cat) => (
+            <option key={cat.id} value={cat.id}>
+              {cat.name}
+            </option>
+          ))}
+        </select>
+
+        <label className="mt-3 block text-xs font-medium text-ink-muted" htmlFor="wd-amount">
           Amount
         </label>
         <input

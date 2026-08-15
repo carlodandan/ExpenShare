@@ -24,6 +24,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     listWithdrawals: () => ipcRenderer.invoke('extraBudget:listWithdrawals'),
     withdraw: (payload) => ipcRenderer.invoke('extraBudget:withdraw', payload),
     deleteWithdrawal: (id) => ipcRenderer.invoke('extraBudget:deleteWithdrawal', id),
+    withdrawAndExpense: (payload) => ipcRenderer.invoke('extraBudget:withdrawAndExpense', payload),
   },
   settings: {
     getAll: () => ipcRenderer.invoke('settings:getAll'),
