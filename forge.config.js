@@ -34,6 +34,20 @@ module.exports = {
       config: {},
     },
   ],
+  publishers: [
+    {
+      name: '@electron-forge/publisher-github',
+      config: {
+        repository: {
+          owner: 'carlodandan',
+          name: 'budget-tracker'
+        },
+        draft: false,
+        tagPrefix: 'beta',
+        generateReleaseNotes: true,
+      }
+    }
+  ],
   plugins: [
     {
       name: '@electron-forge/plugin-vite',

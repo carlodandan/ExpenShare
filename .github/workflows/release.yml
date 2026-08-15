@@ -1,0 +1,27 @@
+name: Build Budget Tracker
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-2025
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    permissions:
+      contents: write
+  
+    steps:
+      # 1. Check out the repository code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 2. Setup Node.js environment
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      # 3. Build the application (Electron Forge make)
+      # This runs the 'make' script from your package.json
+      - name: Build
+        run: pnpm run publish

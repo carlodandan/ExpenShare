@@ -5,15 +5,21 @@
   "description": "Offline household budget tracker for two people.",
   "main": ".vite/build/main.js",
   "scripts": {
-    "dev": "electron-forge start",
     "start": "electron-forge start",
     "package": "electron-forge package",
     "build": "electron-forge make",
-    "make": "electron-forge make",
+    "publish": "electron-forge publish",
     "lint": "eslint src"
   },
   "keywords": [],
-  "author": "",
+  "author": {
+    "name": "Carlo Dandan",
+    "email": "carlodandan.personal@proton.me"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/carlodandan/budget-tracker"
+  },
   "license": "MIT",
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
