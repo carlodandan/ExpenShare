@@ -20,7 +20,9 @@ module.exports = {
     {
       name: '@electron-forge/maker-squirrel',
       config: {
-        name: 'Budget Tracker',
+        name: 'BudgetTracker',
+        authors: 'Carlo Dandan',
+        description: 'Offline household budget tracker for two people.',
       },
     },
   ],
