@@ -21,7 +21,6 @@ jobs:
         with:
           version: 11
           runtime: node@22
-          cache: true
 
       # 3. Build the application (Electron Forge make)
       # This runs the 'make' script from your package.json
