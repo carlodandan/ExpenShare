@@ -37,7 +37,7 @@ module.exports = {
           name: 'expenshare'
         },
         draft: false,
-        tagPrefix: 'beta',
+        tagPrefix: 'ExpenShare-',
         generateReleaseNotes: true,
       }
     }
