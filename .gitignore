@@ -6,6 +6,7 @@ out/
 *.db-wal
 *.db-shm
 .DS_Store
+build/
 
 # Environment
 .env
