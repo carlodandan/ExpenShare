@@ -1,6 +1,5 @@
 import { app, BrowserWindow } from 'electron';
 import { getDatabase, closeDatabase } from './database/database.js';
-import { fileURLToPath } from 'url';
 import path from 'path';
 
 import * as incomeIpc from './ipc/income.ipc.js';
@@ -11,11 +10,6 @@ import * as settingsIpc from './ipc/settings.ipc.js';
 import * as reportsIpc from './ipc/reports.ipc.js';
 import * as backupIpc from './ipc/backup.ipc.js';
 
-// Vite-injected globals for the renderer bundle (provided by
-// @electron-forge/plugin-vite at build time).
-/* global MAIN_WINDOW_VITE_DEV_SERVER_URL, MAIN_WINDOW_VITE_NAME */
-
-// electron-squirrel-startup is a CommonJS module; we can import it as default
 import squirrelStartup from 'electron-squirrel-startup';
 if (squirrelStartup) {
   app.quit();
