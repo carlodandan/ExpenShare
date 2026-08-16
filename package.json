@@ -4,7 +4,11 @@
   "version": "1.0.2",
   "packageManager": "pnpm@12.0.0-beta.4",
   "devEngines": {
-    "runtime": { "name": "node", "version": "^22.0.0", "onFail": "download" }
+    "runtime": {
+      "name": "node",
+      "version": "^22.0.0",
+      "onFail": "download"
+    }
   },
   "description": "Offline household budget tracker for two people.",
   "main": ".vite/build/main.js",
@@ -28,6 +32,7 @@
     "@tailwindcss/vite": "^4.1.18",
     "@vitejs/plugin-react": "^5.1.2",
     "babel-plugin-react-compiler": "^1.0.0",
+    "electron-log": "^5.4.4",
     "electron-squirrel-startup": "^1.0.1",
     "pdfkit": "^0.15.0",
     "react": "^19.2.3",

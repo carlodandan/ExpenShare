@@ -22,7 +22,8 @@ updateElectronApp({
         type: UpdateSourceType.ElectronPublicUpdateService,
         repo: 'carlodandan/ExpenShare'
     },
-    updateInterval: '5 minutes'
+    updateInterval: '5 minutes',
+    logger: require('electron-log')
 });
 
 app.setAppUserModelId("com.budget.tracker.desktop");
@@ -30,13 +31,18 @@ app.setAppUserModelId("com.budget.tracker.desktop");
 let mainWindow = null;
 
 function createWindow() {
+  const isDev = !!MAIN_WINDOW_VITE_DEV_SERVER_URL;
+
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
     minWidth: 900,
     minHeight: 600,
-    autoHideMenuBar: true,
+
+    autoHideMenuBar: !isDev,
+
     backgroundColor: '#f7f7f5',
+
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -44,10 +50,11 @@ function createWindow() {
       webSecurity: true,
       sandbox: true,
     },
+
     icon: path.join(__dirname, '../../icons/expenshare.ico'),
   });
 
-  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+  if (isDev) {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
   } else {
     mainWindow.loadFile(
