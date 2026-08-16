@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 const NAV_ITEMS = [
   { key: 'monthly', label: 'Monthly Dashboard', glyph: '▣' },
@@ -7,11 +7,21 @@ const NAV_ITEMS = [
 ];
 
 export default function Sidebar({ current, onNavigate }) {
+  const [version, setVersion] = useState(null);
+
+  useEffect(() => {
+    async function loadInfo() {
+       const info = await window.electronAPI.settings.getVersion();
+        setVersion(info.app);
+    }
+    loadInfo();
+  }, []);
+
   return (
     <aside className="flex w-56 shrink-0 flex-col justify-between border-r border-line bg-surface">
       <div>
         <div className="px-5 pb-4 pt-6">
-          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-muted">
+          <p className="font-mono text-[15px] uppercase tracking-[0.18em] text-ink-muted">
             ExpenShare
           </p>
         </div>
@@ -58,6 +68,11 @@ export default function Sidebar({ current, onNavigate }) {
           </span>
           Settings
         </button>
+        {version && (
+          <div className="mt-3 text-center text-[15px] text-ink-muted/60">
+            v{version}
+          </div>
+        )}
       </div>
     </aside>
   );

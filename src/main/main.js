@@ -35,11 +35,13 @@ function createWindow() {
     height: 800,
     minWidth: 900,
     minHeight: 600,
+    autoHideMenuBar: true,
     backgroundColor: '#f7f7f5',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
       nodeIntegration: false,
+      webSecurity: true,
       sandbox: true,
     },
     icon: path.join(__dirname, '../../icons/expenshare.ico'),

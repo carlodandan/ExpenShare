@@ -30,6 +30,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     getAll: () => ipcRenderer.invoke('settings:getAll'),
     set: (key, value) => ipcRenderer.invoke('settings:set', key, value),
     renamePerson: (id, name) => ipcRenderer.invoke('settings:renamePerson', id, name),
+    getVersion: () => ipcRenderer.invoke('settings:getVersion'),
   },
   reports: {
     export: (month, format) => ipcRenderer.invoke('reports:export', { month, format }),
@@ -37,5 +38,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   backup: {
     export: () => ipcRenderer.invoke('backup:export'),
     restore: () => ipcRenderer.invoke('backup:restore'),
+  },
+  appInfo: {
+    getVersion: () => ipcRenderer.invoke('get-app-info'),
   },
 });

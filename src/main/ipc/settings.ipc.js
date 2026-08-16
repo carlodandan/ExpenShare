@@ -1,4 +1,4 @@
-import { ipcMain } from 'electron';
+import { app, ipcMain } from 'electron';
 import { getDatabase } from '../database/database.js';
 import * as settings from '../database/settings.js';
 import * as people from '../database/people.js';
@@ -18,5 +18,11 @@ export function register() {
     const db = getDatabase();
     people.rename(db, id, name);
     return settings.getAll(db);
+  });
+
+  ipcMain.handle('settings:getVersion', () => {
+    return {
+       app: app.getVersion(),
+    };
   });
 }
