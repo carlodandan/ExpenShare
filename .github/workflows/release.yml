@@ -40,9 +40,9 @@ jobs:
         shell: bash
         run: |
           VERSION=$(node -p "require('./package.json').version")
-          TAG="$VERSION"
+          TAG="v$VERSION"
 
-          echo "Version: $VERSION"
+          echo "Version: v$VERSION"
           echo "Release tag: $TAG"
 
           RELEASE=$(gh release view "$TAG" \
