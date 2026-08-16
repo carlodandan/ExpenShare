@@ -58,7 +58,7 @@ jobs:
             --arg url "$RELEASE_URL" \
             '{
               embeds: [{
-                title: ("🚀 " + $name),
+                title: ("🚀 ExpenShare" + $name),
                 url: $url,
                 color: 5763719,
                 fields: [
