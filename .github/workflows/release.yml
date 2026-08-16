@@ -40,7 +40,7 @@ jobs:
         shell: bash
         run: |
           VERSION=$(node -p "require('./package.json').version")
-          TAG="ExpenShare-$VERSION"
+          TAG="$VERSION"
 
           echo "Version: $VERSION"
           echo "Release tag: $TAG"
