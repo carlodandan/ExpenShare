@@ -43,3 +43,13 @@ contextBridge.exposeInMainWorld('electronAPI', {
     getVersion: () => ipcRenderer.invoke('get-app-info'),
   },
 });
+
+contextBridge.exposeInMainWorld('updateAPI', {
+  close: () => {
+    ipcRenderer.send('update-window-close');
+  },
+
+  restart: () => {
+    ipcRenderer.send('update-window-restart');
+  }
+});
