@@ -34,7 +34,7 @@ module.exports = {
       config: {
         repository: {
           owner: 'carlodandan',
-          name: 'expenshare'
+          name: 'ExpenShare'
         },
         draft: false,
         tagPrefix: 'ExpenShare-',
